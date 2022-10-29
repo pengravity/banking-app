@@ -108,7 +108,7 @@ nav {
 
 .balance__date {
   font-size: 1.4rem;
-  color: #888;
+  color: rgb(19, 17, 17);
 }
 
 .balance__value {
@@ -208,15 +208,15 @@ nav {
 }
 
 .operation--transfer {
-  background-image: linear-gradient(to top left, #ffb003, #ffcb03);
+  background-image: linear-gradient(to top left, #1281a0, #1bbef0);
 }
 
 .operation--loan {
-  background-image: linear-gradient(to top left, #39b385, #9be15d);
+  background-image: linear-gradient(to top left, #0b7049, #7fc73f);
 }
 
 .operation--close {
-  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+  background-image: linear-gradient(to top left, #be6a0a, #f16d73);
 }
 
 h2 {

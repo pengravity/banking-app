@@ -19,7 +19,7 @@ const account2 = {
 
 const account3 = {
   owner: 'Steven  Williams',
-  movements: [200, -200, 340, -300, -20, 50, 400, -460],
+  movements: [200, -200, 340, -300, -20, 50, 1400, -460],
   interestRate: 0.7,
   pin: 3333,
 };
@@ -90,3 +90,12 @@ const createUsernames = accounts => {
 };
 
 createUsernames(accounts);
+
+const calcDisplayBalance = movements => {
+  const balance = movements.reduce((acc, cur) => {
+    return (acc += cur);
+  }, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+
+calcDisplayBalance(account1.movements);
