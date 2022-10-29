@@ -5,7 +5,7 @@
 // Data
 const account1 = {
   owner: 'John Smith',
-  movements: [1500, 1450, -400, 3000, -1650, -130, 500, 1300],
+  movements: [1500, 1450, -400, 60, 3000, -1650, -130, -70, 500, 1300, 50],
   interestRate: 1.5, // %
   pin: 1111,
 };
@@ -70,7 +70,7 @@ const displayMovements = movements => {
     <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
     <div class="movements__date">3 days ago</div>
-    <div class="movements__value">${mov}</div>
+    <div class="movements__value">${mov}€</div>
   </div>
   `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -95,7 +95,32 @@ const calcDisplayBalance = movements => {
   const balance = movements.reduce((acc, cur) => {
     return (acc += cur);
   }, 0);
-  labelBalance.textContent = `${balance} EUR`;
+  labelBalance.textContent = `${balance} €`;
 };
 
 calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = movements => {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumIn.textContent = `${incomes} €`;
+
+  const outcomes = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, cur) => acc + cur, 0);
+  labelSumOut.textContent = `${Math.abs(outcomes)} €`;
+
+  // interest counted from the deposit * this account InterestRate, paid only if the interest is above 1EUR from this deposit
+  const interest =
+    (movements
+      .filter(mov => mov > 0)
+      .filter(mov => (mov / 100) * account1.interestRate > 1)
+      .reduce((acc, cur) => acc + cur, 0) *
+      account1.interestRate) /
+    100;
+
+  labelSumInterest.textContent = `${interest} €`;
+};
+
+calcDisplaySummary(account1.movements);
