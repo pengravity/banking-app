@@ -27,7 +27,7 @@ const account3 = {
 const account4 = {
   owner: 'Sarah Smith',
   movements: [1200, -500, 3340, -500, -220, -50, 1400, -360],
-  interestRate: 1.2,
+  interestRate: 1.3,
   pin: 4444,
 };
 
@@ -76,7 +76,6 @@ const displayMovements = movements => {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
 
 const createUsernames = accounts => {
   accounts.forEach(
@@ -91,6 +90,38 @@ const createUsernames = accounts => {
 
 createUsernames(accounts);
 
+// event handler
+// ss 4444 //  sw 3333 // gd 2222 // js 1111
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // show UI and welcome message
+
+    labelWelcome.textContent = `Welcome back ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    // show movements
+    displayMovements(currentAccount.movements);
+    // show balance
+    calcDisplayBalance(currentAccount.movements);
+    // show summary
+    calcDisplaySummary(currentAccount);
+
+    // clear Login and pin input fields
+    inputLoginUsername.value = '';
+    inputLoginPin.value = '';
+  }
+});
+
 const calcDisplayBalance = movements => {
   const balance = movements.reduce((acc, cur) => {
     return (acc += cur);
@@ -98,29 +129,25 @@ const calcDisplayBalance = movements => {
   labelBalance.textContent = `${balance} €`;
 };
 
-calcDisplayBalance(account1.movements);
-
-const calcDisplaySummary = movements => {
-  const incomes = movements
+const calcDisplaySummary = acc => {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, cur) => acc + cur, 0);
   labelSumIn.textContent = `${incomes} €`;
 
-  const outcomes = movements
+  const outcomes = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, cur) => acc + cur, 0);
   labelSumOut.textContent = `${Math.abs(outcomes)} €`;
 
   // interest counted from the deposit * this account InterestRate, paid only if the interest is above 1EUR from this deposit
   const interest =
-    (movements
+    (acc.movements
       .filter(mov => mov > 0)
-      .filter(mov => (mov / 100) * account1.interestRate > 1)
+      .filter(mov => (mov / 100) * acc.interestRate >= 1)
       .reduce((acc, cur) => acc + cur, 0) *
-      account1.interestRate) /
+      acc.interestRate) /
     100;
 
   labelSumInterest.textContent = `${interest} €`;
 };
-
-calcDisplaySummary(account1.movements);
