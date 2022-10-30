@@ -116,9 +116,8 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back ${
       currentAccount.owner.split(' ')[0]
     }`;
-    containerApp.style.opacity = 100;
-
     updateUI(currentAccount);
+    containerApp.style.opacity = 100;
 
     // clear Login and pin input fields
     inputLoginUsername.value = '';
@@ -183,5 +182,30 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAccount.movements.push(amount);
     updateUI(currentAccount);
+  }
+});
+
+// close an account
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  console.log(accounts);
+
+  // check username and pin
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    console.log('username and pin correct correct');
+
+    // delete this account
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+
+    inputCloseUsername.value = '';
+    inputClosePin.value = '';
+    // hide UI
+    containerApp.style.opacity = 0;
   }
 });
